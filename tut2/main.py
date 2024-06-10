@@ -23,3 +23,9 @@ def user_details(user_id: str):
 def user_add(user: User):
     users[str(uuid.uuid4())] = user
     return "User added"
+
+
+@app.put("/users/{user_id}", status_code=status.HTTP_200_OK)
+def user_update(user_id: str, user: User):
+    users[user_id] = user
+    return "User updated"
