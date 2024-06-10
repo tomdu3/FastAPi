@@ -29,3 +29,9 @@ def user_add(user: User):
 def user_update(user_id: str, user: User):
     users[user_id] = user
     return "User updated"
+
+
+@app.delete("/users/{user_id}", status_code=status.HTTP_200_OK)
+def user_delete(user_id: str):
+    del users[user_id]
+    return "User deleted"
