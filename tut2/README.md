@@ -227,3 +227,44 @@ def user_delete(user_id: str):
 ```
 
 At this point, you can check against this [GitHub Gist](https://gist.github.com/stackup-dev/0eb4e0bf8157de187174dca4d8936643) to see if you have pasted the code correctly for main.py.
+
+###Step 6: Running the Application
+In your terminal, enter the following command to run the application.
+
+`uvicorn main:app --reload`
+
+![terminal screenshot](./docs/term.jpeg)
+
+Then, click on the URL provided in the terminal (http://127.0.0.1:8000). You will see a message '{"detail":"Not Found"}'.
+
+In the URL, append /**users**  at the end
+
+⚠️ Note: For cloud development environment users, do ensure that 'users' is appended immediately after the top-level domain. For example, https://8000-cs-125-southeast1-mu.cloudshell.dev/users
+
+You should now see the JSON response.
+
+```json
+{"1":{"name":"John","age":20},"2":{"name":"Jane","age":21}}
+```
+
+### Step 7: Testing the API (Option 1 - using cURL)
+This option is suitable for Mac and Linux users (including those using a cloud development environment like Gitpod). ⚠️ Users of Google Cloud Shell may encounter difficulties using this. 
+
+First, we establish our API URL. That is the URL you obtained in the previous steps, e.g. http://127.0.0.1:8000/users. For Gitpod users, your URL may look like this: https://8000-name-folder-p30eylxhu0m.ws-us110.gitpod.io/users
+
+Next, let's send a GET request to retrieve the list of users. In your terminal, enter the following command. For Gitpod users, change the URL accordingly.
+
+`curl -X GET http://127.0.0.1:8000/users`
+
+You should then receive an output.
+
+```json
+{"1":{"name":"John","age":20},"2":{"name":"Jane","age":21}}
+```
+
+Now that you have sent a GET request, here's a challenge 💪.
+
+
+<font color="red">Send a POST request to create a new user. You will need to create a new user named “Bob” who is age 10.
+> </font>
+<font color="green">You will know that you have successfully created a new user when you retrieve the list of users again.</font>
