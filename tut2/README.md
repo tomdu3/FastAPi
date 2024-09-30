@@ -268,3 +268,62 @@ Now that you have sent a GET request, here's a challenge 💪.
 <font color="red">Send a POST request to create a new user. You will need to create a new user named “Bob” who is age 10.
 > </font>
 <font color="green">You will know that you have successfully created a new user when you retrieve the list of users again.</font>
+
+### Step 8: Testing the API (Option 2 - using Postman)
+This option is suitable for Windows users and users who are not familiar with the cURL command.
+
+Head to the [Postman website](https://www.postman.com/downloads) and download the installation package for your operating system. Follow the instructions on the installer and create an account.
+
+After setting up, you should see this page.
+![Postman 1 Image](./docs/postman1.png)
+
+Click “**My Workspace**” and you will see a workspace that allows you to manage your collections and requests.
+
+Next to the “Overview” tab, click on the “+” icon to create a new request in the workspace.
+![Postman 2 Image](./docs/postman2.png)
+
+Enter your API URL, which should be http://127.0.0.1:8000/users, into the URL field and click on “**Send**” to send a GET request to retrieve the list of users.
+
+⚠️ Note: For cloud development environment users, such as Codespaces, do ensure that you have set the port visibility of port 8000 to public. Also, use the forwarded address provided by the cloud development environment. 
+![Postman 3 Image](./docs/postman3.png)
+
+Now that you’ve sent a GET request with Postman, here's a challenge.
+
+Try to send a POST request to create a new user. You will need to create a new user named “Bob” who is age 10. You will need to [figure out how to send a JSON request body](https://learning.postman.com/docs/sending-requests/requests/#sending-body-data) and include it in your POST request.
+
+After sending a successful POST request, you should receive the response as shown below.
+
+![Postman 4 Image](./docs/postman4.png)
+
+⚠️ Note: Do not delete the request body as you will need it for your submission.
+
+Then, attempt to retrieve the list of users again using a GET request, you will see a new user at the bottom of the JSON response.
+
+![Postman 5 Image](./docs/postman5.png)
+
+### Step 9: Let’s Ace Your Submissions! Preparing Your Submission!
+You have reached the end! Now to make sure you successfully complete this quest! There is **1 deliverable** required for this quest, a screenshot. Make sure you complete it before submitting this quest!
+
+**For users who went with Option 1:** Take a screenshot of your VS Code interface with the terminal output. 
+
+**For users who went with Option 2:** You will need to take a screenshot of your screen with your Terminal and Postman window side by side.
+
+Your screenshot should show:
+
+- your full screen, including your taskbar (for Windows) / dock (for MacOS)
+- The terminal has a 201 status code for POST /users
+- the new user named “Bob” who is age 10 in the JSON response
+- make sure that all parts visible in ‘Expected output’ in this step are also - visible in your screenshot(s)!
+- For Option 2 users, Postman window's Body showing JSON request of adding the user Bob
+
+![Submission 1 Image](./docs/submission1.jpeg)
+Option 1 Expected Output. Right click to open in new tab for full resolution.
+
+![Submission 2 Image](./docs/submission2.jpeg)
+Option 2 Expected Output. Right click to open in new tab for full resolution.
+
+When labelling your screenshot, make sure to follow the format provided: **C27_Q2_yourstackupusername.png**.
+
+Note: You can retrieve your StackUp username by clicking on the burger menu at the top right-hand corner of this page. You can read [this article](https://stackuphelpcentre.zendesk.com/hc/en-us/articles/25416574073625-How-to-obtain-your-Campus-Learn-and-Earn-v2-0-username-) on how to obtain your StackUp username.
+
+By submitting the quest, please note that our StackUp Policy prohibits the use of multiple accounts by a single user and the submission of copied work.
