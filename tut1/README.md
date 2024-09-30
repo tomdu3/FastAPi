@@ -1,4 +1,4 @@
-# Tutorial 1: FastAPI
+# Tutorial 1: Introduction to FastAPI
 
 ## Learning Outcomes
 
