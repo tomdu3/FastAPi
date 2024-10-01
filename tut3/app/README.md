@@ -60,7 +60,7 @@ To initialise your virtual environment, you will need to enter the following com
 
 🍎 MacOS and Linux Users: `source ./venv/bin/activate`
 
-# Step 2: Updating Your Dependencies
+### Step 2: Updating Your Dependencies
 In the requirements.txt file, add the following lines to install the packages required in this project. Be sure to save your file once done.
 
 ```text
@@ -75,3 +75,51 @@ We will then install the packages with the following command. Ensure your termin
 `pip3 install -r requirements.txt`
 
 Your terminal output should show that the packages have been successfully installed.
+
+### Step 3: Connecting a Database
+Before we start creating our database tables, we need to connect to a database. This could be MySQL, PostgreSQL or other servers. We will use an SQLite database file for simplicity.
+
+In the file **database.py**, enter the following code to create the engine, session and base that will be imported into the other files for database operations. Replace StackUp_USERNAME with your StackUp username.
+
+```python
+from sqlalchemy import create_engine
+from sqlalchemy.ext.declarative import declarative_base
+from sqlalchemy.orm import sessionmaker
+
+SQLALCHEMY_DATABASE_URL = "sqlite:///./STACKUP_USERNAME.db"
+
+engine = create_engine(
+    SQLALCHEMY_DATABASE_URL, connect_args={"check_same_thread": False}
+)
+SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
+
+Base = declarative_base()
+```
+
+
+This code creates an SQLAlchemy engine that connects to the URL specified in the `SQLALCHEMY_DATABASE_URL` variable, which in this case is an SQLite database file. If the database file does not exist, it will create the file in the tut3 folder the first time you establish a connection.
+
+It then creates a sessionmaker object to create Session objects that can be used to interact with the database and a `Base` which will help with generated mapped Table objects for your models.
+
+
+# Step 4: Creating the Models
+Now, we want to create some classes that SQLAlchemy can use to help us with querying and managing our database. For this project, we will create 1 class that reflects the attributes of a table containing item/product information.
+
+In **models.py**, paste the following code and save the file.
+
+```python
+from sqlalchemy import Column, Integer, String
+
+from .database import Base
+
+class Item(Base):
+    __tablename__ = "items"
+
+    id = Column(Integer, primary_key=True)
+    title = Column(String)
+    description = Column(String)
+    price = Column(Integer)
+```
+
+The code creates the Item class with some standard attributes such as the product’s title, description and price.
+
