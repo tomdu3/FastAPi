@@ -123,3 +123,168 @@ class Item(Base):
 
 The code creates the Item class with some standard attributes such as the product’s title, description and price.
 
+
+### Step 5: Organising the Schemas
+
+With the database connection set up and our Item model defined, we now need to create schemas with Pydantic that allow FastAPI to expect pre-defined data structures in requests for specific actions.
+
+In **schemas.py**, paste the following code to create these classes.
+
+In the first line, we import the `BaseModel` class that we can use to define how our data looks and its validation requirements.
+
+```python
+from pydantic import BaseModel
+```
+
+Subsequently, we create the `ItemBase` class using the BaseModel to define the attributes our Item class should contain.
+
+```python
+class ItemBase(BaseModel):
+    title: str
+    description: str | None = None
+    price: float
+```
+
+Within the ItemBase class, we define 3 attributes:
+
+- The title, which should be a string
+- The description, which should be a string but is optional
+- The price, which should be a float/decimal
+
+Next, we create the ItemCreate class.
+
+```python
+class ItemCreate(ItemBase):
+    pass
+```
+
+This class inherits the attributes from the `ItemBase` class and can contain any other attributes that may be required for creation.
+
+Lastly, we create the Item class that contains the ID attribute for when the database assigns an auto-incrementing ID number to the object.
+
+```python
+class Item(ItemBase):
+    id: int
+```
+Your **schemas.py** file should now look like this. Remember to save your file.
+
+```python
+from pydantic import BaseModel
+
+class ItemBase(BaseModel):
+    title: str
+    description: str | None = None
+    price: float
+
+class ItemCreate(ItemBase):
+    pass
+
+class Item(ItemBase):
+    id: int
+```
+
+### Step 6: Creating the Controllers
+
+For our application to execute CRUD operations on the database, we should first define some reusable helper functions that we could use later.
+
+In **controllers.py**, enter the following code in order.
+
+First, we import the Session class from SQLAlchemy and the models and schemas we defined earlier.
+
+```python
+from sqlalchemy.orm import Session
+
+from . import models, schemas
+```
+
+Next, we can write the function that reads rows from the database.
+
+```python
+def get_items(db: Session, skip: int = 0, limit: int = 100):
+    return db.query(models.Item).offset(skip).limit(limit).all()
+```
+
+The function takes in a database session, the `skip` and `limit` arguments to allow users to filter data by offset and limit the number of results returned. It then queries the database for all filtered Item objects.
+
+We can write a similar function to query a single Item object by specifying the ID.
+
+```python
+def get_item(db: Session, item_id: int):
+    return db.query(models.Item).filter(models.Item.id == item_id).first()
+```
+
+Then, we can write the function to Create, or add rows to the Items table.
+
+```python
+def create_item(db: Session, item: schemas.ItemCreate):
+    db_item = models.Item(title=item.title, description=item.description, price=item.price)
+    db.add(db_item)
+    db.commit()
+    db.refresh(db_item)
+    return db_item
+```
+
+The function takes in a database session and an item object using the schema we created earlier. It creates an Item object using the model we created in models.py. It uses the attributes from the item passed in and adds the object to the database. It then commits the change.
+
+To allow updating of rows, we can use the following function.
+
+```python
+def update_item(db: Session, item_id: int, item: schemas.ItemCreate):
+    db_item = db.query(models.Item).filter(models.Item.id == item_id).first()
+    db_item.title = item.title
+    db_item.description = item.description
+    db_item.price = item.price
+    db.commit()
+    db.refresh(db_item)
+    return db_item
+```
+
+The function takes in a database session, the ID of the item to update, and the item object with the updated attributes. It first queries the existing row by retrieving the Item object with the corresponding ID, then assigning new values to the attributes and finally committing the changes.
+
+Lastly, a function to delete Item objects by their numerical ID.
+
+```python
+def delete_item(db: Session, item_id: int):
+    db_item = db.query(models.Item).filter(models.Item.id == item_id).first()
+    db.delete(db_item)
+    db.commit()
+    return db_item
+```
+
+The function takes in a database session and the ID of the item to delete. It then simply queries the Item with the corresponding ID and deletes it from the database, committing the changes afterwards.
+
+Your final code in **controllers.py** should look similar to this. Remember to save your file.
+
+```python
+from sqlalchemy.orm import Session
+
+from . import models, schemas
+
+def get_items(db: Session, skip: int = 0, limit: int = 100):
+    return db.query(models.Item).offset(skip).limit(limit).all()
+
+def get_item(db: Session, item_id: int):
+    return db.query(models.Item).filter(models.Item.id == item_id).first()
+
+def create_item(db: Session, item: schemas.ItemCreate):
+    db_item = models.Item(title=item.title, description=item.description, price=item.price)
+    db.add(db_item)
+    db.commit()
+    db.refresh(db_item)
+    return db_item
+
+def update_item(db: Session, item_id: int, item: schemas.ItemCreate):
+    db_item = db.query(models.Item).filter(models.Item.id == item_id).first()
+    db_item.title = item.title
+    db_item.description = item.description
+    db_item.price = item.price
+    db.commit()
+    db.refresh(db_item)
+    return db_item
+
+def delete_item(db: Session, item_id: int):
+    db_item = db.query(models.Item).filter(models.Item.id == item_id).first()
+    db.delete(db_item)
+    db.commit()
+    return db_item
+```
