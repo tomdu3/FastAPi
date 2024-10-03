@@ -499,7 +499,35 @@ Then, retrieve the ID of the item. To do that, you will need to use a GET reques
 
 After clicking on the Send button, you should see a body response like this. 
 
-![Postman 2 Image](./docs/postman2.png)
+![Postman 2 Image](./docs/postman2.jpg)
 
 With that, we are done testing our API!
 
+
+### Step 11: Let’s Ace Your Submissions! Preparing Your Submission!
+
+Great job following till the end! The last step - preparing the deliverables. 
+
+**For Option 1 users**, you will need to take a screenshot of your terminal.
+
+**For Option 2 users**, you will need to take a screenshot of your Postman window.
+
+Your screenshot should show:
+
+- your full screen, including your [taskbar](https://community-library.netlify.app/blog/What-if-I-don%27t-have-a-taskbar) (for Windows) / dock (for MacOS)
+- A 200 OK status for the PUT request
+- (Option 1) POST and PUT responses to the cURL commands, as shown in expected output image below
+- (Option 2) your Postman application with a successful PUT request to /items/{item_id}
+- (Option 2) Body response shows the updated item
+
+![Output 1 Image](./docs/output1.png)
+Expected Output for Option 1 users. Right click and open in new tab to view in full resolution.&nbsp;
+
+![Output 2 Image](./docs/output2.png)
+Expected Output for Option 2 users. Right click and open in new tab to view in full resolution.
+
+When labelling your screenshot, make sure to follow the format provided: **C27_Q3_yourstackupusername.png**.
+
+Note: You can retrieve your StackUp username by clicking on the burger menu at the top right-hand corner of this page. You can read [this article](https://stackuphelpcentre.zendesk.com/hc/en-us/articles/25416574073625-How-to-obtain-your-Campus-Learn-and-Earn-v2-0-username-) on how to obtain your StackUp username.
+
+By submitting the quest, please note that our StackUp Policy prohibits the use of multiple accounts by a single user and the submission of copied work.
