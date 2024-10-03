@@ -434,3 +434,20 @@ def delete_item(item_id: int, db: Session = Depends(get_db)):
         raise HTTPException(status_code=404, detail="Item not found")
     return db_item
 ```
+
+### Step 8: Running the API Server
+
+With all of our code written, all that's left is to test it. 
+
+In the **tut3** directory, run the API server with the following command.
+
+`uvicorn app.main:app --reload`
+
+![Output Image](./docs/output.png)
+You should see an output like this.&nbsp;
+
+If you click on the link (http://127.0.0.1:8000), you will be brought to a page that says `"{"detail":"Not Found"}`". 
+
+Note: For cloud development environment users, do ensure that your port visibility is set to public. If you are unsure how to do this, look up the environment's documentation. 
+
+Append **/items** to the URL. The message is now `[ ]`. This is because our database currently does not have any items. 
