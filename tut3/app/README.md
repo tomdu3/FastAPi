@@ -520,10 +520,10 @@ Your screenshot should show:
 - (Option 2) your Postman application with a successful PUT request to /items/{item_id}
 - (Option 2) Body response shows the updated item
 
-![Output 1 Image](./docs/output1.png)
+![Output 1 Image](./docs/output1.jpg)
 Expected Output for Option 1 users. Right click and open in new tab to view in full resolution.&nbsp;
 
-![Output 2 Image](./docs/output2.png)
+![Output 2 Image](./docs/output2.jpg)
 Expected Output for Option 2 users. Right click and open in new tab to view in full resolution.
 
 When labelling your screenshot, make sure to follow the format provided: **C27_Q3_yourstackupusername.png**.
