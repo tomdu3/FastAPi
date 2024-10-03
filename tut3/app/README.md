@@ -102,7 +102,7 @@ This code creates an SQLAlchemy engine that connects to the URL specified in the
 It then creates a sessionmaker object to create Session objects that can be used to interact with the database and a `Base` which will help with generated mapped Table objects for your models.
 
 
-# Step 4: Creating the Models
+### Step 4: Creating the Models
 Now, we want to create some classes that SQLAlchemy can use to help us with querying and managing our database. For this project, we will create 1 class that reflects the attributes of a table containing item/product information.
 
 In **models.py**, paste the following code and save the file.
@@ -286,5 +286,151 @@ def delete_item(db: Session, item_id: int):
     db_item = db.query(models.Item).filter(models.Item.id == item_id).first()
     db.delete(db_item)
     db.commit()
+    return db_item
+```
+
+### Step 7: Putting Everything Together
+
+Now that all our models, schemas and controllers have been created, we can put the application together in **main.py**. For all the code chunks mentioned in this step, add them to main.py.
+
+Firstly, we import our FastAPI and SQLAlchemy dependencies, as well as the classes we wrote earlier.
+
+```python
+from fastapi import Depends, FastAPI, HTTPException
+from sqlalchemy.orm import Session
+
+from . import controllers, models, schemas
+from .database import SessionLocal, engine
+```
+
+Next, create all the tables defined in models.py.
+
+```python
+models.Base.metadata.create_all(bind=engine)
+```
+
+Then, create the FastAPI application.
+
+```python
+app = FastAPI()
+```
+
+We can define a helper function `get_db()` that will be used as a dependency to check if the database is up.
+
+```python
+def get_db():
+    db = SessionLocal()
+    try:
+        yield db
+    finally:
+        db.close()
+```
+
+Now we can write the functions for our CRUD operations.
+
+To allow users to read from our database, we can create endpoints at `/items` and `/items/{item_id}` that support GET requests, utilising the functions, `read_items()` and `read_item()` we created in controllers.py.
+
+```python
+@app.get("/items/", response_model=list[schemas.Item])
+def read_items(skip: int = 0, limit: int = 100, db: Session = Depends(get_db)):
+    items = controllers.get_items(db, skip=skip, limit=limit)
+    return items
+
+@app.get("/items/{item_id}", response_model=schemas.Item)
+def read_item(item_id: int, db: Session = Depends(get_db)):
+    db_item = controllers.get_item(db, item_id=item_id)
+    if db_item is None:
+        raise HTTPException(status_code=404, detail="Item not found")
+    return db_item
+```
+
+In the `read_items` function, we take in the `skip` and `limit` arguments as query parameters. These arguments allow users to filter through the data. For example, skip=1 selects from the second row onwards, and limit=50 limits the number of rows returned to the first fifty. The function then creates a database connection using our helper function `get_db()`.
+
+It then passes the database connection and the arguments to our `get_items()` controller function to retrieve all items, and returns it as JSON that conforms to the response model list (`schemas.Item`) which means an array/list of Item classes.
+
+`read_item()` is similar but retrieves only one item by its ID, as in `/items/1`, returning a single dictionary if the item exists.
+
+Next, we create a listener for POST requests to `/items` which allows users to create Items, or add rows to the table.
+
+```python
+@app.post("/items/", response_model=schemas.Item)
+def create_item(item: schemas.ItemCreate, db: Session = Depends(get_db)):
+    return controllers.create_item(db=db, item=item)
+```
+
+The code is similar to the Read functions, except it expects a JSON request body that is validated by our `ItemCreate` schema. If valid, it creates an item and returns the Item as a JSON object, following the Item schema.
+
+For updating rows, we create a listener for PUT requests to `/items/{item_id}`, which allows users to specify the ID of the item they would like to update in the URL, e.g. /items/1.
+
+```python
+@app.put("/items/{item_id}", response_model=schemas.Item)
+def update_item(item_id: int, item: schemas.ItemCreate, db: Session = Depends(get_db)):
+    db_item = controllers.update_item(db, item_id=item_id, item=item)
+    if db_item is None:
+        raise HTTPException(status_code=404, detail="Item not found")
+    return db_item
+```
+
+The function expects a JSON request body matching our `ItemCreate` schema, and passes it to our `update_item()` controller function with the specified ID. If the ID exists, the row in the table is updated. Otherwise, it simply responds with an error with the status code 404 and “Item not found” message.
+
+Lastly, create a listener for DELETE requests to `/items/{item_id}` to allow users to delete Items by their ID.
+
+```python
+@app.delete("/items/{item_id}", response_model=schemas.Item)
+def delete_item(item_id: int, db: Session = Depends(get_db)):
+    db_item = controllers.delete_item(db, item_id=item_id)
+    if db_item is None:
+        raise HTTPException(status_code=404, detail="Item not found")
+    return db_item
+```
+
+By now, your main.py should contain the following code. Remember to save your file. 
+
+```python
+from fastapi import Depends, FastAPI, HTTPException
+from sqlalchemy.orm import Session
+
+from . import controllers, models, schemas
+from .database import SessionLocal, engine
+
+models.Base.metadata.create_all(bind=engine)
+
+app = FastAPI()
+
+def get_db():
+    db = SessionLocal()
+    try:
+        yield db
+    finally:
+        db.close()
+
+@app.get("/items/", response_model=list[schemas.Item])
+def read_items(skip: int = 0, limit: int = 100, db: Session = Depends(get_db)):
+    items = controllers.get_items(db, skip=skip, limit=limit)
+    return items
+
+@app.get("/items/{item_id}", response_model=schemas.Item)
+def read_item(item_id: int, db: Session = Depends(get_db)):
+    db_item = controllers.get_item(db, item_id=item_id)
+    if db_item is None:
+        raise HTTPException(status_code=404, detail="Item not found")
+    return db_item
+
+@app.post("/items/", response_model=schemas.Item)
+def create_item(item: schemas.ItemCreate, db: Session = Depends(get_db)):
+    return controllers.create_item(db=db, item=item)
+
+@app.put("/items/{item_id}", response_model=schemas.Item)
+def update_item(item_id: int, item: schemas.ItemCreate, db: Session = Depends(get_db)):
+    db_item = controllers.update_item(db, item_id=item_id, item=item)
+    if db_item is None:
+        raise HTTPException(status_code=404, detail="Item not found")
+    return db_item
+
+@app.delete("/items/{item_id}", response_model=schemas.Item)
+def delete_item(item_id: int, db: Session = Depends(get_db)):
+    db_item = controllers.delete_item(db, item_id=item_id)
+    if db_item is None:
+        raise HTTPException(status_code=404, detail="Item not found")
     return db_item
 ```
