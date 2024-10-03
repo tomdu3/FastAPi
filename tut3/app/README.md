@@ -451,3 +451,55 @@ If you click on the link (http://127.0.0.1:8000), you will be brought to a page 
 Note: For cloud development environment users, do ensure that your port visibility is set to public. If you are unsure how to do this, look up the environment's documentation. 
 
 Append **/items** to the URL. The message is now `[ ]`. This is because our database currently does not have any items. 
+
+
+### Step 9: Testing the API (Option 1 - using cURL)
+
+This option is suitable for Mac and Linux users (including those using a cloud development environment like Gitpod). ⚠️ Users of Google Cloud Shell may encounter difficulties using this. 
+
+First, we establish our API URL. That is the URL you obtained in the previous steps, e.g. http://127.0.0.1:8000/items. For Gitpod users, your URL may look like this: https://8000-name-folder-p30eylxhu0m.ws-us110.gitpod.io/items
+
+You will be using cURL commands in your terminal to add and update an item. No instructions will be provided since you already have some experience using cURL in the previous quest.
+
+**Task 1:** Previously, we used the API to create a user Bob with the age 10 attribute. In the same manner, use the API to create an item with the following attributes.
+
+- title: StackUp Hoodie
+- description: Wowzers
+- price: 13.37
+
+Then, retrieve the ID of the item. This will be needed for the next task. 
+
+**Task 2:** Once done, proceed to update the item using a PUT request with the following attributes. Remember to update the endpoint.
+
+- title: StackUp Hoodie v2
+- description: OMG
+- price: 137.70
+
+With that, we are done testing our API!
+
+### Step 10: Testing the API (Option 2 - using Postman)
+
+Open your Postman application, which you installed previously. 
+
+Task 1: Previously, we used the API to create a user Bob with the age 10 attribute. In the same manner, use the API to **create an item** with the following attributes.
+
+- title: StackUp Hoodie
+- description: Wowzers
+- price: 13.37
+
+![Postman 1 Image](./docs/postman1.jpg)
+
+Then, retrieve the ID of the item. To do that, you will need to use a GET request. We are not providing detailed instructions here, as you should already know how to perform this operation from experience. You can also read [this resource](https://learning.postman.com/docs/sending-requests/create-requests/parameters/).
+
+**Task 2:** Once done, proceed to update the item using a PUT request with the following attributes. Remember to update the endpoint.
+
+- title: StackUp Hoodie v2
+- description: OMG
+- Price: 137.70
+
+After clicking on the Send button, you should see a body response like this. 
+
+![Postman 2 Image](./docs/postman2.png)
+
+With that, we are done testing our API!
+
