@@ -6,7 +6,23 @@ from .database import SessionLocal, engine
 
 models.Base.metadata.create_all(bind=engine)
 
-app = FastAPI()
+app = FastAPI(
+    # Swagger Docs
+    title="Items API",
+    description="A simple FastAPI application for managing items with CRUD operations.",
+    version="1.0.0",
+    openapi_tags= [
+
+        {
+            "name": "items",
+            "description": "Manage items. So _fancy_ they have their own docs.",
+            "externalDocs": {
+                "description": "Items external docs",
+                "url": "https://fastapi.tiangolo.com/",
+            },
+        },
+    ]
+)
 
 
 def get_db():
