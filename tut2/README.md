@@ -178,7 +178,7 @@ def user_details(user_id: str):
 
 For the subsequent endpoints, we will respond with non-default status codes to indicate the status of the operation requested.
 
-In some web applications, administrators may be able to add users to the database, which typically involves a POST request to /users. We will use the uuid package to generate random user IDs to ensure we have unique IDs. Paste the following code.
+In some web applications, administrators may be able to add users to the database, which typically involves a POST request to /users. We will use the `uuid` package to generate random user IDs to ensure we have unique IDs. Paste the following code.
 
 ```python
 @app.post("/users", status_code=status.HTTP_201_CREATED)
